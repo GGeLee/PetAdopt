@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<link rel="stylesheet" href="/css/bootstrap.min.css" />
+		<script src="/iconfont/iconfont.js"></script>
+		<script src="/js/jquery.min.js"></script>
+		<script src="/js/bootstrap.bundle.min.js"></script>
+		<style type="text/css">
+			body {
+				background: url("/img0751934c-a7a6-483e-8ebd-d164fa8e3685.jpg") no-repeat center center fixed;
+				background-size: cover;
+			}
+			
+			.icon {
+			  width: 1.5em;
+			  height: 1.5em;
+			  vertical-align: -0.35em;
+			  fill: currentColor;
+			  overflow: hidden;
+			}
+			div{
+				font-weight: 400;
+				font-size: 18px;
+			}
+
+		</style>
+	</head>
+	<body>
+		<!--导航条-->
+		<div th:insert="~{header::nav}"></div>
+
+		<div class="container">
+			<div class="jumbotron" style="margin-top: 50px;">
+				<div class="row">
+					<div class="col-md-6">
+						<img th:src="@{/img/{i}(i=${pet.petPic})}" alt="..." class="img-fluid w-100 rounded">
+					</div>
+
+					<div class="col-md-6">
+
+						<div>
+
+							&nbsp;名字：
+							<span th:text="${pet.petName}"></span>
+						</div>
+						<div>
+
+							&nbsp;性别：
+							<span th:text="${pet.petSex}"></span>
+						</div>
+						<div>
+							&nbsp;种类：
+							<span th:text="${pet.petSub}"></span>
+						</div>
+						<div>
+
+							&nbsp;品种：
+							<span th:text="${pet.petType}"></span>
+						</div>
+						<div>
+
+							&nbsp;生日：
+							<span th:text="${pet.petBir}"></span>
+						</div>
+						<div>
+
+							&nbsp;领养状态：
+							<span th:text="${pet.petState}"></span>
+						</div>
+						<div>
+
+							&nbsp;宠物介绍：
+							<span th:text="${pet.petDetail}"></span>
+						</div>
+
+						<input type="hidden" id="uid" th:value="${session.Id}">
+						<input type="hidden" id="pid" th:value="${pet.petId}">
+						<hr class="my-4">
+						<span th:if="${session.user.userTelephone==null}" >
+							<a href="/info" role="button" class="btn btn-outline-warning btn-lg">请先完善个人资料</a>
+						</span>
+						<span id="al2">
+							<a th:if="${session.user.userTelephone!=null}" class="btn btn-outline-info btn-lg"  onclick="apply()" role="button">申请领养</a>
+						</span>
+						<div class="alert alert-primary" role="alert" id="al1" style="display: none">
+							申请成功！前往个人中心查看<a href="/info" class="alert-link">审核状态</a>。
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+
+	</body>
+<!--	领养申请-->
+<script type="text/javascript">
+	function apply() {
+		var uid = $("#uid").val();
+		var pid = $("#pid").val();
+		$.ajax({
+			url:"/Apply/save/"+uid+"/"+pid,
+			success:function (data) {
+				if(data.toString()=='ok'){
+					$("#al1").show();
+					$("#al2").hide();
+				}
+			}
+		});
+	}
+</script>
+</html>
